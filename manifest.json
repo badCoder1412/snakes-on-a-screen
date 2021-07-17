@@ -1,0 +1,21 @@
+{
+    "manifest_version": 2,
+    "name": "snakegame",
+    "version":"0.1",
+    "permissions": ["tabs"],
+    "content_scripts":[
+        {
+            "matches":[
+                "<all_urls>"
+            ],
+            "js":["p5.js","snake.js","sketch.js","content.js"]
+        }
+    ],
+    "background": {
+        "scripts" :["background.js"]
+    },
+
+    "browser_action" : {
+        "default_popup":"popup.html"
+    }
+}
