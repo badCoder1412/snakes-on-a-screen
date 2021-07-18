@@ -16,9 +16,14 @@ body{
 
 .center{
     text-align: center;
+    padding-top: 2px;
 }
 
 .button-container{
     float:right;
     display: block;
+}
+
+.snake{
+    margin-left: 35px;
 }
