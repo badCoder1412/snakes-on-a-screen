@@ -1,4 +1,4 @@
-console.log('sketch.js is runnning')
+
 chrome.storage.local.get(["highscore"], function (data) {
 	if (data["highscore"] === undefined) {
 		chrome.storage.local.set({ 'highscore': 0 });
@@ -102,7 +102,6 @@ const s = (p) => {
 	p.draw = function() {
 
 			p.scale(rez);
-			// background(0);
 			if (snake.update(food)) {
 				foodLocation();
 			}
