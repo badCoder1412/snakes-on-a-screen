@@ -1,14 +1,14 @@
 {
     "manifest_version": 2,
-    "name": "snakegame",
+    "name": "snakes-on-a-screen",
     "version":"0.1",
-    "permissions": ["activeTab"],
+    "permissions": ["activeTab","storage"],
     "content_scripts":[
         {
             "matches":[
                 "<all_urls>"
             ],
-            "js":["p5.js","snake.js","sketch.js","content.js"]
+            "js":["p5.js","sketch.js"]
         }
     ],
     "background": {

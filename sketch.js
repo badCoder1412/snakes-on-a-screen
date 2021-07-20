@@ -1,4 +1,14 @@
 console.log('sketch.js is runnning')
+chrome.storage.local.get(["highscore"], function (data) {
+	if (data["highscore"] === undefined) {
+		chrome.storage.local.set({ 'highscore': 0 });
+	}
+})
+var highscore ;
+var score = 0;
+chrome.storage.local.get(["highscore"],function(data){
+	highscore = data["highscore"];
+});
 const s = (p) => {
 	let snake;
 	const rez = 20;
@@ -14,7 +24,8 @@ const s = (p) => {
 	}
 
 	p.setup = function() {
-		let c = p.createCanvas(p.windowWidth, p.windowHeight);
+
+		let c = p.createCanvas(p.windowWidth-20, p.windowHeight-20);
 		c.position(0, 0);
 		w = p.floor(p.windowWidth / rez);
 		h = p.floor(p.windowHeight / rez);
@@ -36,7 +47,8 @@ const s = (p) => {
 				this.body.push(this.head.copy());
 				this.head.add(this.dir);
 				if (this.head.x === food.x && this.head.y === food.y) {
-					return true; // yum!
+					score++;
+					return true; 
 				}
 				this.body.shift();
 				return false;
@@ -68,13 +80,13 @@ const s = (p) => {
 			}
 
 		}
-		snake = new Snake();
+		snake = new Snake(); 
 
 		dirs = {
-			[p.LEFT_ARROW]: p.createVector(-1, 0),
-			[p.RIGHT_ARROW]: p.createVector(1, 0),
-			[p.DOWN_ARROW]: p.createVector(0, 1),
-			[p.UP_ARROW]: p.createVector(0, -1)
+			[72]: p.createVector(-1, 0),
+			[75]: p.createVector(1, 0),
+			[74]: p.createVector(0, 1),
+			[85]: p.createVector(0, -1)
 		};
 
 		foodLocation();
@@ -100,6 +112,11 @@ const s = (p) => {
 				p.print("END GAME");
 				p.background(255, 0, 0);
 				p.noLoop();
+				if(score>highscore){
+					chrome.storage.local.set({ "highscore": score }, function () {
+						// console.log('highscore is set to ' + score);
+					});
+				}
 			}
 
 			p.noStroke();
@@ -107,23 +124,12 @@ const s = (p) => {
 			p.rect(food.x, food.y, 1, 1);
 			chrome.runtime.onMessage.addListener(
 				function (request, sender, sendResponse) {
-					// if (request.message === "newgame") {
-
-					// 	// sendResponse({ farewell: "userwantsanewgame" });
-					// 	// function to start the game again
-					// 	// p.clear();
-					// 	// loop();
-					// }
-					if (request.message === "highscore") {
-						console.log('highscore')
-						// sendResponse({ farewell: "highscore" });
-						// function to display highscore
+					if (request.message === "newgame") {
+						// remove existing game
+						p.remove();
 					}
+					
 					if (request.message === "exit") {
-						// console.log('exit')
-						// sendResponse({ farewell: "exit" });
-						// function to exit
-						// remove();
 						p.noLoop();
 						setTimeout(() => {
 							p.clear();
@@ -136,18 +142,14 @@ const s = (p) => {
 };
 
 
-const exit = ()=>{
-	remove();
-}
-
-const startnewgame = () => {
-	
-}
-
 chrome.runtime.onMessage.addListener(
 	function (request, sender, sendResponse) {
-	if(request.message === 'newgame'){	
+	if(request.message === 'newgame'){
 	console.log('newgame');
-	new p5(s);
+	setTimeout(() => {
+		new p5(s);
+	}, 2);
+
 	}
 });
+

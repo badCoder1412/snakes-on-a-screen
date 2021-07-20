@@ -15,15 +15,8 @@ newgame.addEventListener('click',() => {
     chrome.tabs.sendMessage(activeTab.id, { "message": "newgame" });
     });
 
-})
-// highscore.addEventListener('click', () => {
-//     console.log('highscore');
-//     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-//     var activeTab = tabs[0];
-//     chrome.tabs.sendMessage(activeTab.id, { "message": "highscore" });
-//     });
+});
 
-// })
 exit.addEventListener('click', () => {
     console.log('exit');
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -31,5 +24,13 @@ exit.addEventListener('click', () => {
     chrome.tabs.sendMessage(activeTab.id, { "message": "exit" });
     });
 
+});
+
+chrome.storage.local.get(['highscore'],(data)=>{
+    highscore.textContent += data['highscore'];
+})
+
+chrome.storage.onChanged.addListener((changes, local)=>{
+ alert(changes["highscore"]);
 })
 
